@@ -26,11 +26,16 @@ public class OptionLawsTest {
 	}
 
 	@Test
+	public void associativity() {
+		Function<String, Option<String>> f = nullSafeBindable(String::toUpperCase);
+		Function<String, Option<String>> g = nullSafeBindable(s -> s + s);
+
+		Assert.assertEquals(m.bind(f).bind(g), m.bind((String x) -> f.apply(x).bind(g)));
+	}
+
+	@Test
 	public void leftUnit() {
-		Function<String, Option<Integer>> f = s -> {
-			if (s == null) return Option.unit(null);
-			return Option.unit(s.length());
-		};
+		Function<String, Option<Integer>> f = nullSafeBindable(String::length);
 		
 		Assert.assertEquals(f.apply(x), Option.unit(x).bind(f));
 	}
@@ -38,6 +43,13 @@ public class OptionLawsTest {
 	@Test
 	public void rightUnit() {
 		Assert.assertEquals(m, m.bind(Option::unit));
+	}
+
+	private <R> Function<String, Option<R>> nullSafeBindable(Function<String, R> f) {
+		return s -> {
+			if (s == null) return Option.unit(null);
+			return Option.unit(f.apply(s));
+		};
 	}
 
 }
