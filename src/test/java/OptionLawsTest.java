@@ -20,13 +20,23 @@ public class OptionLawsTest {
 		});
 	}
 
-	public OptionLawsTest(String s) {
-		this.x = s;
-		this.m = Option.unit(s);
+	public OptionLawsTest(String string) {
+		this.x = string;
+		this.m = Option.unit(string);
 	}
 
 	@Test
-	public void test1() {
+	public void leftUnit() {
+		Function<String, Option<Integer>> f = s -> {
+			if (s == null) return Option.unit(null);
+			return Option.unit(s.length());
+		};
+		
+		Assert.assertEquals(f.apply(x), Option.unit(x).bind(f));
+	}
+
+	@Test
+	public void rightUnit() {
 		Assert.assertEquals(m, m.bind(Option::unit));
 	}
 
