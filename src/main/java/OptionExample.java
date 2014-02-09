@@ -8,24 +8,18 @@ class OptionExample {
 
 	private void test() {
 		String b = safeB();
+		System.out.println(b);
 	}
 
-	private String getA() {
-		return "a";
+	private Option<String> getA() {
+		return Option.unit("a");
 	}
 
-	private String aToB(String a) {
-		return "b";
+	private Option<String> aToB(String a) {
+		return Option.unit("b");
 	}
 
 	private String safeB() {
-		String a = getA();
-		if (a != null) {
-			String b = aToB(a);
-			if (b != null) {
-				return b;
-			}
-		}
-		return "b not found";
+		return getA().bind(this::aToB).getOrElse("b not found");
 	}
 }
