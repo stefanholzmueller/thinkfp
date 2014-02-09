@@ -1,10 +1,8 @@
 
-class OptionType {
-
-
+class OptionExample {
 
 	public static void main(String[] args) {
-		OptionType o = new OptionType();
+		OptionExample o = new OptionExample();
 		o.test();
 	}
 
