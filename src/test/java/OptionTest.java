@@ -3,28 +3,32 @@ import org.junit.Test;
 
 import java.util.function.Function;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 public class OptionTest {
 
 	public static final Option<Object> NONE = Option.unit(null);
 
 	@Test
 	public void isEmpty_none_true() {
-		Assert.assertTrue(NONE.isEmpty());
+		assertTrue(NONE.isEmpty());
 	}
 
 	@Test
 	public void isEmpty_some_false() {
-		Assert.assertFalse(Option.unit("some").isEmpty());
+		assertFalse(Option.unit("some").isEmpty());
 	}
 
 	@Test
 	public void getOrElse_none_elseValue() {
-		Assert.assertEquals("else", NONE.getOrElse("else"));
+		assertEquals("else", NONE.getOrElse("else"));
 	}
 
 	@Test
 	public void getOrElse_some_someValue() {
-		Assert.assertEquals("some", Option.unit("some").getOrElse("else"));
+		assertEquals("some", Option.unit("some").getOrElse("else"));
 	}
 
 	@Test
@@ -32,7 +36,7 @@ public class OptionTest {
 		Option<String> noneStr = Option.unit((String) null);
 		Function<String, Option<Integer>> f = (String s) -> Option.unit(null);
 		Option<Integer> optInt = noneStr.bind(f);
-		Assert.assertTrue(optInt.isEmpty());
+		assertTrue(optInt.isEmpty());
 	}
 
 	@Test
@@ -40,7 +44,7 @@ public class OptionTest {
 		Option<String> noneStr = Option.unit((String) null);
 		Function<String, Option<Integer>> f = (String s) -> Option.unit(s.length());
 		Option<Integer> optInt = noneStr.bind(f);
-		Assert.assertTrue(optInt.isEmpty());
+		assertTrue(optInt.isEmpty());
 	}
 
 	@Test
@@ -48,7 +52,7 @@ public class OptionTest {
 		Option<String> noneStr = Option.unit("some");
 		Function<String, Option<Integer>> f = (String s) -> Option.unit(null);
 		Option<Integer> optInt = noneStr.bind(f);
-		Assert.assertTrue(optInt.isEmpty());
+		assertTrue(optInt.isEmpty());
 	}
 
 	@Test
@@ -56,8 +60,8 @@ public class OptionTest {
 		Option<String> noneStr = Option.unit("some");
 		Function<String, Option<Integer>> f = (String s) -> Option.unit(s.length());
 		Option<Integer> optInt = noneStr.bind(f);
-		Assert.assertFalse(optInt.isEmpty());
-		Assert.assertEquals(4, (int) optInt.getOrElse(0));
+		assertFalse(optInt.isEmpty());
+		assertEquals(4, (int) optInt.getOrElse(0));
 	}
 
 }
