@@ -1,4 +1,3 @@
-import junit.framework.Assert;
 import org.junit.Test;
 
 import java.util.function.Function;
@@ -7,24 +6,24 @@ import static junit.framework.Assert.assertEquals;
 
 public class OptionLawsTest {
 
-	private String x = "test";
-	private Option<String> m = Option.unit(x);
+	private String s = " test ";
+	private Option<String> m = Option.unit(s);
 
 	@Test
 	public void associativity() {
-		Function<String, Option<String>> f = s -> Option.unit(s.toUpperCase());
-		Function<String, Option<String>> g = s -> Option.unit(s + " " + s);
-		assertEquals(m.bind(f).bind(g), m.bind((String x) -> f.apply(x).bind(g)));
+		Function<String, Option<String>> f = s -> Option.unit(s.trim());
+		Function<String, Option<Integer>> g = s -> Option.unit(s.length());
+		assertEquals(m.bind(f).bind(g), m.bind(x -> f.apply(x).bind(g)));
 	}
 
 	@Test
-	public void leftUnit() {
+	public void leftIdentity() {
 		Function<String, Option<Integer>> f = s -> Option.unit(s.length());
-		assertEquals(f.apply(x), Option.unit(x).bind(f));
+		assertEquals(f.apply(s), Option.unit(s).bind(f));
 	}
 
 	@Test
-	public void rightUnit() {
+	public void rightIdentity() {
 		assertEquals(m, m.bind(Option::unit));
 	}
 
