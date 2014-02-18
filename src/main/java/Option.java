@@ -1,6 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.ArrayList;
 import java.util.function.Function;
 
 public abstract class Option<T> {
@@ -11,6 +8,7 @@ public abstract class Option<T> {
 
 	public abstract <R> Option<R> bind(Function<T, Option<R>> f);
 	public abstract boolean isEmpty();
+	public abstract T getOrThrow();
 	public abstract T getOrElse(T elseValue);
 
 	private Option() {}
@@ -28,6 +26,10 @@ public abstract class Option<T> {
 		@Override
 		public T getOrElse(T elseValue) {
 			return elseValue;
+		}
+		@Override
+		public T getOrThrow() {
+			throw new RuntimeException();
 		}
 		@Override
 		public <R> Option<R> map(Function<T, R> f) {
@@ -52,6 +54,10 @@ public abstract class Option<T> {
 		}
 		@Override
 		public T getOrElse(T elseValue) {
+			return this.value;
+		}
+		@Override
+		public T getOrThrow() {
 			return this.value;
 		}
 
