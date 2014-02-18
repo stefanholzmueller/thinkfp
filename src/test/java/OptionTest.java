@@ -1,4 +1,3 @@
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.function.Function;
@@ -60,6 +59,39 @@ public class OptionTest {
 		Option<String> noneStr = Option.unit("some");
 		Function<String, Option<Integer>> f = (String s) -> Option.unit(s.length());
 		Option<Integer> optInt = noneStr.bind(f);
+		assertFalse(optInt.isEmpty());
+		assertEquals(4, (int) optInt.getOrElse(0));
+	}
+
+	@Test
+	public void map_noneAndNone_none() {
+		Option<String> noneStr = Option.unit((String) null);
+		Function<String, Integer> f = (String s) -> null;
+		Option<Integer> optInt = noneStr.map(f);
+		assertTrue(optInt.isEmpty());
+	}
+
+	@Test
+	public void map_noneAndSome_none() {
+		Option<String> noneStr = Option.unit((String) null);
+		Function<String, Integer> f = (String s) -> s.length();
+		Option<Integer> optInt = noneStr.map(f);
+		assertTrue(optInt.isEmpty());
+	}
+
+	@Test
+	public void map_someAndNone_none() {
+		Option<String> noneStr = Option.unit("some");
+		Function<String, Integer> f = (String s) -> null;
+		Option<Integer> optInt = noneStr.map(f);
+		assertTrue(optInt.isEmpty());
+	}
+
+	@Test
+	public void map_someAndSome_Some() {
+		Option<String> noneStr = Option.unit("some");
+		Function<String, Integer> f = (String s) -> s.length();
+		Option<Integer> optInt = noneStr.map(f);
 		assertFalse(optInt.isEmpty());
 		assertEquals(4, (int) optInt.getOrElse(0));
 	}

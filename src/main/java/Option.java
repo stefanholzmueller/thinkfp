@@ -5,36 +5,37 @@ import java.util.function.Function;
 
 public abstract class Option<T> {
 
+	public <R> Option<R> map(Function<T, R> f) {
+		return bind(f.andThen(Option::unit));
+	}
+
 	public abstract <R> Option<R> bind(Function<T, Option<R>> f);
-
 	public abstract boolean isEmpty();
-
 	public abstract T getOrElse(T elseValue);
 
 	private Option() {}
 
 	private static final Option NONE = new None();
-
 	private static final class None<T> extends Option<T> {
-
 		@Override
 		public <R> Option<R> bind(Function<T, Option<R>> f) {
 			return NONE;
 		}
-
 		@Override
 		public boolean isEmpty() {
 			return true;
 		}
-
 		@Override
 		public T getOrElse(T elseValue) {
 			return elseValue;
 		}
+		@Override
+		public <R> Option<R> map(Function<T, R> f) {
+			return NONE;
+		}
 	}
 
 	private static final class Some<T> extends Option<T> {
-
 		private final T value; // never null
 
 		private Some(T value) {
@@ -45,12 +46,10 @@ public abstract class Option<T> {
 		public <R> Option<R> bind(Function<T, Option<R>> f) {
 			return f.apply(this.value);
 		}
-
 		@Override
 		public boolean isEmpty() {
 			return false;
 		}
-
 		@Override
 		public T getOrElse(T elseValue) {
 			return this.value;
