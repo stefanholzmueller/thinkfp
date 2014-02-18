@@ -1,25 +1,28 @@
+import org.w3c.dom.Document;
 
 class OptionExample {
 
 	public static void main(String[] args) {
 		OptionExample o = new OptionExample();
-		o.test();
+		System.out.println(o.nullSafeChain());
 	}
 
-	private void test() {
-		String b = safeB();
-		System.out.println(b);
+	private String loadXmlStringFromDatabase() { /* ... */
+		return null;
+	}
+	private Document parseXmlToDom(String xml) { /* ... */
+		return null;
+	}
+	private String findRelevantValue(Document doc) { /* ... */
+		return null;
 	}
 
-	private Option<String> getA() {
-		return Option.unit("a");
+	private String nullSafeChain() {
+		Option<String> optionized = Option.unit(loadXmlStringFromDatabase());
+		Option<String> chained = optionized.map(xml -> parseXmlToDom(xml)).map(doc -> findRelevantValue(doc));
+		return chained.getOrElse("default value");
 	}
-
-	private Option<String> aToB(String a) {
-		return Option.unit("b");
-	}
-
-	private String safeB() {
-		return getA().bind(this::aToB).getOrElse("b not found");
+	private String nullSafeChain2() {
+		return Option.unit(loadXmlStringFromDatabase()).map(this::parseXmlToDom).map(this::findRelevantValue).getOrElse("default value");
 	}
 }
