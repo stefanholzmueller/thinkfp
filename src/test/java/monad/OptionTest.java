@@ -1,3 +1,6 @@
+package monad;
+
+import monad.Option;
 import org.junit.Test;
 
 import java.util.function.Function;

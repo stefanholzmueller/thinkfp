@@ -1,3 +1,5 @@
+package monad;
+
 import java.util.ArrayList;
 import java.util.function.Function;
 

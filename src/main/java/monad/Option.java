@@ -1,3 +1,5 @@
+package monad;
+
 import java.util.function.Function;
 
 public abstract class Option<T> {
@@ -30,10 +32,6 @@ public abstract class Option<T> {
 		@Override
 		public T getOrThrow() {
 			throw new RuntimeException();
-		}
-		@Override
-		public <R> Option<R> map(Function<T, R> f) {
-			return NONE;
 		}
 	}
 
